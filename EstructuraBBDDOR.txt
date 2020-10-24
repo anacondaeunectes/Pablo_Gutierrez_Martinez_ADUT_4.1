@@ -1,0 +1,60 @@
+MODELO OBJETO-RELACIONAL
+
+TABLAS:
+- Curso
+- Alumno(ref a curso // anida tabla de objetos NOTA la cual ref a asignatura)
+- Asignatura
+
+
+TIPOS:
+- CURSO
+- ALUMNO -->
+		TABLA_ANID_NOTA (tabla anidada de objetos NOTA)
+- NOTA --> 
+		CONTACTO
+		DOMICILIO
+- ASIGNATURA
+
+	RESPECTO A TIPO "CURSO":
+		- El atributo ID_CURSO_NUMBER es PRIMARY_KEY
+		- Tipos de atributos:
+			+COD_ASIG: NUMBER(4).
+			+NOMBRE: VARCHAR2(80).
+			+TIPO: CHAR. Puede ser: Formacion Básica(f), obligarotias(o), 
+			optativas(p), prácticas externas(x) o trabajo fin titulación(t).
+
+
+	RESPECTO A TIPO "ALUMNO":
+		- El atributo DNI es PRIMARY_KEY
+		- Agrupar telefono1 y telefono2 en un VARRAY(CONTACTO).
+		- Agrupar direccion, población, codpostal y provincia en un TIPO(DOMICILIO).
+		- Será necesario agregar un atributo "notas" que sea una tabla anidada de 
+			objetos NOTA (TABLA_ANID_NOTA).
+		- El atributo ID_CURSO sera una referencia(ref) a un objeto de tipo CURSO.
+
+	RESPECTO A TIPO "NOTA":
+		- No es necesario el atributo DNI ya que la tabla de objetos de este tipo va 
+			a estar anidada dentro de la tabla de objetos alumno. Cada objeto 
+			nota va a estar contenido en un objeto ALUMNO, por lo que ya se 
+			encuentran relacionados a través de ese anidamiento.
+		- El atributo COD_ASIG es PRIMARY_KEY. Por la misma razón por la que el 
+			atributo DNI no es necesario, tiene sentido que la PK de un objeto 
+			NOTA solo sea su asignatura.
+		- El atributo COD_ASIG será una referencia a un objeto de tipo ASIGNATURA.
+		- Controlar a través de un TRIGGER  que al hacer un INSERT de un objeto NOTA, 
+			si este tiene la evaluación final aprobada no se puede introducir la 
+		 	nota de Septiembre.
+
+	
+
+PL/SQL:
+-Procedimientos:
+	+Ver_alumno(DNI) --> Muestra nombre, domicilio (todos los datos) y notas de cada 
+	asignatura en cada evaluacion.
+	+ 
+
+-Funciones:
+	+
+
+-Triggers:
+	+comprobar_septiembre(DNI, Asignatura) --> 
