@@ -5,56 +5,82 @@ TABLAS:
 - Alumno(ref a curso // anida tabla de objetos NOTA la cual ref a asignatura)
 - Asignatura
 
+---------------------------------------------o----------------------------------------------
+
 
 TIPOS:
 - CURSO
-- ALUMNO -->
-		TABLA_ANID_NOTA (tabla anidada de objetos NOTA)
-- NOTA --> 
-		CONTACTO
-		DOMICILIO
+- ALUMNO --> La conversión va a requerir crear los siguientes tipos:
+		-CONTACTO (VARRAY para los teléfonos)
+		-DOMICILIO (tipo que  agrupa los atributos dirección, población, codgpostal
+ 			y provincia)
+		-TABLA_ANID_NOTA (tabla anidada de objetos NOTA)
+
+- NOTA --> La conversión va a requerir crear los siguientes tipos:
+		-EVALUACION (VARRAY para las notas de las distintas evaluaciones)
+		
 - ASIGNATURA
+- Además, de cara a la escalabilidad de la BBDD, se va a crear un tipo PERSONA del cual
+ 	heredara el tipo ALUMNO. Este recogerá datos propios de una persona: nombre,
+	domicilio (tipo nombrado anteriormente), contacto (tipo nombrado anteriormente) y
+	fecha de nacimiento.
+
 
 	RESPECTO A TIPO "CURSO":
 		- El atributo ID_CURSO_NUMBER es PRIMARY_KEY
-		- Tipos de atributos:
-			+COD_ASIG: NUMBER(4).
-			+NOMBRE: VARCHAR2(80).
-			+TIPO: CHAR. Puede ser: Formacion Básica(f), obligarotias(o), 
-			optativas(p), prácticas externas(x) o trabajo fin titulación(t).
-
 
 	RESPECTO A TIPO "ALUMNO":
-		- El atributo DNI es PRIMARY_KEY
-		- Agrupar telefono1 y telefono2 en un VARRAY(CONTACTO).
-		- Agrupar direccion, población, codpostal y provincia en un TIPO(DOMICILIO).
+		- El atributo DNI es PRIMARY_KEY.
+		- Este tipo heredará del tipo PERSONA.
 		- Será necesario agregar un atributo "notas" que sea una tabla anidada de 
 			objetos NOTA (TABLA_ANID_NOTA).
 		- El atributo ID_CURSO sera una referencia(ref) a un objeto de tipo CURSO.
+		- Quedaría de la siguiente manera (teniendo en cuenta la herencia):
+			+DNI VARCHAR2(10)
+			+ID_CURSO REF CURSO
+			+NOTA TABLA_ANID_NOTA
 
 	RESPECTO A TIPO "NOTA":
 		- No es necesario el atributo DNI ya que la tabla de objetos de este tipo va 
 			a estar anidada dentro de la tabla de objetos alumno. Cada objeto 
 			nota va a estar contenido en un objeto ALUMNO, por lo que ya se 
 			encuentran relacionados a través de ese anidamiento.
-		- El atributo COD_ASIG es PRIMARY_KEY. Por la misma razón por la que el 
-			atributo DNI no es necesario, tiene sentido que la PK de un objeto 
-			NOTA solo sea su asignatura.
+		- El atributo COD_ASIG es PRIMARY_KEY. Teniendo en cuenta la razón por la que
+ 			el atributo DNI no es necesario, cobra sentido que la PK de un objeto
+ 			NOTA solo sea su asignatura.
 		- El atributo COD_ASIG será una referencia a un objeto de tipo ASIGNATURA.
+		- Agrupor todos los atributos referentes a las distintas evaluaciones en un 
+			VARRAY(EVALUACION).
 		- Controlar a través de un TRIGGER  que al hacer un INSERT de un objeto NOTA, 
 			si este tiene la evaluación final aprobada no se puede introducir la 
 		 	nota de Septiembre.
+		-Quedaría de la siguiente manera:
+			+COD_ASIG REF ASIGNATURA
+			+EVALUACI EVALUACION 
 
-	
+	RESPECTO A TIPO "ASIGNATURAS":
+		- Tipos de atributos:
+			+COD_ASIG: NUMBER(4).
+			+NOMBRE: VARCHAR2(80).
+			+TIPO: CHAR. Puede ser: Formacion Básica(f), obligarotias(o), 
+			optativas(p), prácticas externas(x) o trabajo fin titulación(t).
 
-PL/SQL:
+---------------------------------------------o----------------------------------------------
+
+PL/SQL(Más allá de procedimientos para INSERTS, UPDATES, DELETE):
 -Procedimientos:
-	+Ver_alumno(DNI) --> Muestra nombre, domicilio (todos los datos) y notas de cada 
+	+ Ver_alumno(DNI) --> Muestra nombre, domicilio (todos los datos) y notas de cada 
 	asignatura en cada evaluacion.
 	+ 
 
 -Funciones:
-	+
+	+ Count_Alumno_Curso(Id_Curso) --> Devuelve el número de alumnos en un curso.
+	+ Count_Aprobados_General() --> Devuelve el número de aprobados de entre todos los 
+		alumnos de todos los cursos.
+	+ Calcular_Media_Alumno(DNI) --> Devuelve la nota media de las tres primeras 
+		evaluaciones, es decir, la nota final de Junio (notafjunio) 
 
 -Triggers:
-	+comprobar_septiembre(DNI, Asignatura) --> 
+	+comprobar_septiembre(DNI, Asignatura) --> Al insertar una nota, se asegura que, en 
+		caso de que ese alumno tenga aprobada la nota final de esa asignatura, no 
+		se haya insertado la nota de septiembre.
