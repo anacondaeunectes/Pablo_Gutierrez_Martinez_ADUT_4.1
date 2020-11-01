@@ -27,7 +27,8 @@ TIPOS:
 
 
 	RESPECTO A TIPO "CURSO":
-		- El atributo ID_CURSO_NUMBER es PRIMARY_KEY
+		- El atributo ID_CURSO_NUMBER es PRIMARY_KEY.
+		-El atributo TURNO puede ser: mañana(m) o tarde(t). Por defecto es mañana(m)
 
 	RESPECTO A TIPO "ALUMNO":
 		- El atributo DNI es PRIMARY_KEY.
