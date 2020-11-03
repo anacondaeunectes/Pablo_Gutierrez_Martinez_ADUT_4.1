@@ -1,7 +1,7 @@
 
 /*INSERCCIÓN SI VALOR "NIVEL" EN LA TABLA CURSO. COGE EL VALOR POR DEFECTO PARA EL CAMPO "NIVEL"*/
 
-INSERT INTO curso_tabla (ID_CURSO, DESCRIPCION, NIVEL) VALUES(57, 'curso 20-21', 'secundaria');
+INSERT INTO curso_tabla (ID_CURSO, DESCRIPCION, NIVEL) VALUES(57, 'curso 20-21', 'secundaria'); 
 
 ------------------------------------------------------------------------
 
