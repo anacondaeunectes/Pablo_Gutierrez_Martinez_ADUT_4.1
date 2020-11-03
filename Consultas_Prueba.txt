@@ -1,0 +1,14 @@
+
+/*INSERCCIÓN SI VALOR "NIVEL" EN LA TABLA CURSO. COGE EL VALOR POR DEFECTO PARA EL CAMPO "NIVEL"*/
+
+INSERT INTO curso_tabla (ID_CURSO, DESCRIPCION, NIVEL) VALUES(57, 'curso 20-21', 'secundaria');
+
+------------------------------------------------------------------------
+
+DELETE FROM curso_tabla WHERE ID_CURSO = 57;
+
+-------------------------------------------------------------------------
+
+/*INSERCCIÓN EN TABLA ANIDADA*/
+
+INSERT INTO TABLE(SELECT NOTA FROM alumno_tabla WHERE NOMBRE = 'Pepe') VALUES(NOTA_TYPE((SELECT REF(B) FROM ASIGNATURA_TABLA B WHERE COD_ASIG = 13), EVALUACION_VARRAY(4,7,5)));
