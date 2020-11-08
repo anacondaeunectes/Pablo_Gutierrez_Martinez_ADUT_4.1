@@ -10,7 +10,7 @@ public class App {
 	
 	private static Modelo modelo;
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
 		
 		System.out.println("¡Bienvenido!. A continuacion se le pediran los datos para la conexion con la base de datos:");
 		
@@ -154,6 +154,39 @@ public class App {
 					break;
 
 				case 2:
+					int id;
+					String descripcion, nivel;
+					char turno;
+					
+					System.out.println("Introduzca el ID del curso:");
+					id = entradaDatos.pedirInt();
+					
+					System.out.println("Introduzca una descripcion para el curso:");
+					descripcion = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el nivel del curso:");
+					nivel = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el turno del curso(mañana (m), tarde(t)):");
+					turno = entradaDatos.pedirString().charAt(0);
+					
+					modelo.create_curso(id, descripcion, nivel, turno);
+					break;
+					
+				case 3:
+					int codigo;
+					char tipo;
+					
+					System.out.println("Introduzca el codigo de la asignatura:");
+					codigo = entradaDatos.pedirInt();
+					
+					System.out.println("Introduzca el nombre de la asignatura:");
+					nombre = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el tipo de asignatura(Formacion Básica(f), obligarotias(o), optativas(p), prácticas externas(x) o trabajo fin titulación(t)):");
+					tipo = entradaDatos.pedirString().charAt(0);
+					
+					modelo.create_asignatura(codigo, nombre, tipo);
 					break;
 				}
 
@@ -191,6 +224,117 @@ public class App {
 				}
 				modelo.asignar_nota_alumno(dni, codigoAsignatura, nota_1, nota_2, nota_3, nota_final, nota_septiembre, flagSeptiembre);
 				
+				break;
+				
+			case 4:
+				System.out.println("1. Actualizar alumno");
+				System.out.println("2. Actualizar curso");
+				System.out.println("3. Actualizar asignatura");
+				System.out.println("0. Volver al menu");
+				switch (num = entradaDatos.pedirInt_Parametros(0, 3)) {
+				
+				case 1:
+					String nombre=null, direccion=null, poblacion=null, provincia=null, contacto_1=null, contacto_2=null, fecha_nac=null, DNI=null;
+					int codpostal, idcurso;
+					
+					System.out.println("Introduzca el DNI del alumno a actualizar:");
+					DNI = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el nombre del alumno:");
+					nombre = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca la direccion del alumno:");
+					direccion = entradaDatos.pedirString();
+
+					System.out.println("Introduzca la poblacion del alumno:");
+					poblacion = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el codigo postal del alumno:");
+					codpostal = entradaDatos.pedirInt();
+					
+					System.out.println("Introduzca la provincia del alumno:");
+					provincia = entradaDatos.pedirString();
+					
+					System.out.println("¿Posee telefono de contacto?");
+					if (entradaDatos.pedirYesNo() == 1) {
+						System.out.println("Introduzca el numero de telefono:");
+						contacto_1 = entradaDatos.pedirString();
+					}
+					
+					System.out.println("¿Desea agregar un segundo numero de contacto?");
+					if (entradaDatos.pedirYesNo() == 1) {
+						System.out.println("Introduzca el numero de telefono:");
+						contacto_2 = entradaDatos.pedirString();
+					}
+					
+					System.out.println("Introduzca el ID del curso del alumno(Se le presenta un listado con los cursos actuales):");
+					modelo.read_all_curso();
+					idcurso = entradaDatos.pedirInt();
+					
+					modelo.update_alumno(nombre, direccion, poblacion, codpostal, provincia, contacto_1, contacto_2, fecha_nac, DNI, idcurso);
+					break;
+					
+				case 2:
+					int id;
+					String descripcion, nivel;
+					char turno;
+					
+					System.out.println("Introduzca el ID del curso a actualizar:");
+					id = entradaDatos.pedirInt();
+					
+					System.out.println("Introduzca una descripcion para el curso:");
+					descripcion = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el nivel del curso:");
+					nivel = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el turno del curso(mañana (m), tarde(t)):");
+					turno = entradaDatos.pedirString().charAt(0);
+					
+					modelo.update_curso(id, descripcion, nivel, turno);
+					break;
+				
+				case 3:
+					int codigo;
+					char tipo;
+					
+					System.out.println("Introduzca el codigo de la asignatura a actualizar:");
+					codigo = entradaDatos.pedirInt();
+					
+					System.out.println("Introduzca el nombre de la asignatura:");
+					nombre = entradaDatos.pedirString();
+					
+					System.out.println("Introduzca el tipo de asignatura(Formacion Básica(f), obligarotias(o), optativas(p), prácticas externas(x) o trabajo fin titulación(t)):");
+					tipo = entradaDatos.pedirString().charAt(0);
+					
+					modelo.update_asignatura(codigo, nombre, tipo);
+					break;
+				}
+				break;
+				
+			case 5:
+				System.out.println("1. Eliminar alumno");
+				System.out.println("2. Eliminar curso");
+				System.out.println("3. Eliminar asignatura");
+				System.out.println("0. Volver al menu");
+				switch (num = entradaDatos.pedirInt_Parametros(0, 3)) {
+				
+				case 1:
+					System.out.println("Introduzca el DNI del alumno a eliminar");
+					modelo.delete_alumno(entradaDatos.pedirString());
+					break;
+					
+				case 2:
+					System.out.println("Introduzca el ID del curso a eliminar");
+					modelo.delete_curso(entradaDatos.pedirInt());
+					break;
+					
+				case 3:
+					System.out.println("Introduzca el codigo de la asignatura a eliminar");
+					modelo.delete_asignatura(entradaDatos.pedirInt());
+					break;
+				}
+
 				break;
 				
 			case 0:
