@@ -92,7 +92,7 @@ public class Modelo extends Conexion{
 	 * @param nota_septiembre
 	 * @throws SQLException
 	 */
-	public void asignar_nota_alumno(String dni, int codigoAsignatura, double nota_1, double nota_2, double nota_3, double nota_final, double nota_septiembre) throws SQLException {
+	public void asignar_nota_alumno(String dni, int codigoAsignatura, double nota_1, double nota_2, double nota_3, double nota_final, double nota_septiembre, boolean flagSeptiembre) throws SQLException {
 		
 		CallableStatement call_st = getConnection().prepareCall("CALL asignar_nota_alumno(?,?,?,?,?,?,?)");
 		
@@ -102,7 +102,11 @@ public class Modelo extends Conexion{
 		call_st.setDouble(4, nota_2);
 		call_st.setDouble(5, nota_3);
 		call_st.setDouble(6, nota_final);
-		call_st.setDouble(7, nota_septiembre);
+		if (flagSeptiembre) {
+			call_st.setDouble(7, nota_septiembre);
+		}else {
+			call_st.setNull(7, Types.NULL);
+		}
 		
 		call_st.execute();
 	}

@@ -105,6 +105,7 @@ public class App {
 					}
 					break;
 				}
+				break;
 			case 2:
 				System.out.println("1. Insertar alumno");
 				System.out.println("2. Insertar curso");
@@ -157,6 +158,44 @@ public class App {
 				}
 
 				break;
+				
+			case 3:
+				String dni = null;
+				int codigoAsignatura;
+				double nota_1, nota_2, nota_3, nota_final, nota_septiembre = 0;
+				boolean flagSeptiembre = false;
+				
+				System.out.println("Inserte el DNI del alumno al que asignar las notas de una asignatura:");
+				dni = entradaDatos.pedirString();
+				
+				System.out.println("Inserte el codigo de la asignatura a la que asignar las notas:");
+				codigoAsignatura = entradaDatos.pedirInt();
+				
+				System.out.println("Inserte la nota de la primera evaluacion:");
+				nota_1 = entradaDatos.pedirDouble();
+				
+				System.out.println("Inserte la nota de la segunda evaluacion:");
+				nota_2 = entradaDatos.pedirDouble();
+				
+				System.out.println("Inserte la nota de la tercera evaluacion:");
+				nota_3 = entradaDatos.pedirDouble();
+				
+				System.out.println("Inserte la nota de la evaluacion final:");
+				nota_final = entradaDatos.pedirDouble();
+				
+				System.out.println("¿Requiere agregar la nota dela evaluacion de Septiembre?");
+				if (entradaDatos.pedirYesNo() == 1) {
+					flagSeptiembre = true;
+					System.out.println("Inserte la nota de la evaluacion de Septiembre:");
+					nota_septiembre = entradaDatos.pedirDouble();
+				}
+				modelo.asignar_nota_alumno(dni, codigoAsignatura, nota_1, nota_2, nota_3, nota_final, nota_septiembre, flagSeptiembre);
+				
+				break;
+				
+			case 0:
+				System.out.println("¡Adios! Saliendo del programa...");
+				num = 77;
 			}
 		}
 		
